@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resource :signin, only: [ :new, :create, :update ]
+  resource :signin, only: [ :new, :create ], path_names: { new: "" } do
+    post :callback, on: :collection
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   resource :session
 

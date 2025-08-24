@@ -1,17 +1,49 @@
-<%= form_with(model: registration) do |form| %>
-  <% if registration.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(registration.errors.count, "error") %> prohibited this registration from being saved:</h2>
+<%= form_with(
+  model: user, url: signin_path, class: "w-full space-y-4",
+  data: { turbo:"false", controller: "registration", action: "submit->registration#callback" }) do |form|
+%>
+  <!-- Name Field -->
+  <div class="form-control w-full">
+    <label class="label" for="user_name">
+      <span class="label-text font-medium">Name</span>
+      <span class="label-text-alt text-error">*</span>
+    </label>
+    <%= form.text_field :name,
+        required: true,
+        placeholder: "Display name",
+        class: "input input-bordered w-full focus:input-primary",
+        id: "user_name" %>
+    <% if user.errors[:name].any? %>
+      <label class="label">
+        <span class="label-text-alt text-error"><%= user.errors[:name].first %></span>
+      </label>
+    <% end %>
+  </div>
 
-      <ul>
-        <% registration.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <!-- Username Field -->
+  <div class="form-control w-full">
+    <label class="label" for="user_username">
+      <span class="label-text font-medium">Username</span>
+      <span class="label-text-alt text-error">*</span>
+    </label>
+    <%= form.text_field :username,
+        required: true,
+        placeholder: "Choose a username",
+        class: "input input-bordered w-full focus:input-primary",
+        id: "user_username" %>
+    <label class="label">
+      <span class="label-text-alt">Username must be unique</span>
+    </label>
+    <% if user.errors[:username].any? %>
+      <label class="label">
+        <span class="label-text-alt text-error"><%= user.errors[:username].first %></span>
+      </label>
+    <% end %>
+  </div>
 
-  <div>
-    <%= form.submit %>
+  <!-- Submit Button -->
+  <div class="form-control w-full mt-6">
+    <%= form.submit "Create Account",
+        class: "btn btn-primary w-full" %>
   </div>
 <% end %>

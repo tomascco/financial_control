@@ -3,36 +3,63 @@ class SigninsController < ApplicationController
 
   # GET /signin/new
   def new
+    render :new, locals: { user: User.new }
   end
 
   # POST /sigin
   def create
-    @registration = Registration.new(registration_params)
+    user = User.new(user_params)
 
-    if @registration.save
-      redirect_to @registration, notice: "Registration was successfully created."
+    create_options = ::WebAuthn::Credential.options_for_create(
+      user: { id: user.webauthn_id, name: user.name },
+      authenticator_selection: { user_verification: "required" },
+    )
+
+    if user.valid?
+      session[:current_registration] = { user: user.attributes, create_options: create_options }
+      render json: create_options
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_content
     end
   end
 
   # PATCH/PUT /signin
   def update
-    if @registration.update(registration_params)
-      redirect_to @registration, notice: "Registration was successfully updated.", status: :see_other
-    else
-      render :edit, status: :unprocessable_entity
+    webauthn_credential = ::WebAuthn::Credential.from_create(credential_params)
+
+    user = User.new(session.dig(:current_registration, :user))
+
+    begin
+      webauthn_credential.verify(session.dig(:current_registration, :challange), user_verification: true)
+
+      user.credentials.build(
+        external_id: webauthn_credential.id,
+        nickname: params[:credential_nickname],
+        public_key: webauthn_credential.public_key,
+        sign_count: webauthn_credential.sign_count,
+      )
+
+      if user.save
+        # sign_in(user)
+        # redirect_to root_path, notice: "Welcome, #{user.name}!"
+      else
+        render json: "Could not save your Passkey. Please, try again.", status: :unprocessable_content
+      end
+    rescue ::WebAuthn::Error => e
+      render json: "Verification failed: #{e.message}", status: :unprocessable_content
+    ensure
+      session.delete(:current_registration)
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_registration
-      @registration = Registration.find(params.expect(:id))
-    end
+  # Use callbacks to share common setup or constraints between actions.
 
-    # Only allow a list of trusted parameters through.
-    def registration_params
-      params.fetch(:registration, {})
-    end
+  def user_params
+    params.expect(user: [ :name, :username ])
+  end
+
+  def credential_params
+    params.expect(:credential).permit(:id, :raw_id, :response, :type, :client_extension_results)
+  end
 end

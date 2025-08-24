@@ -1,9 +1,3 @@
-<% content_for :title, "New registration" %>
+<% content_for :title, "Account Creation" %>
 
-<h1>New registration</h1>
-<button class="btn btn-primary">Hello daisyUI!</button>
-<br>
-
-<div>
-
-</div>
+<%= render partial: 'form', locals: { user: user } %>
