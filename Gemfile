@@ -35,7 +35,11 @@ gem "kamal", require: false
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
 
+# Use Event Sourcing to build your Rails application [https://railseventstore.org]
 gem "rails_event_store"
+
+# Use WebAuthn for passwordless authentication [https://webauthn.guide]
+gem "webauthn"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

@@ -10,9 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_23_184140) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_24_133640) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "credentials", force: :cascade do |t|
+    t.string "external_id"
+    t.string "public_key"
+    t.string "nickname"
+    t.string "sign_count"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_id"], name: "index_credentials_on_external_id", unique: true
+    t.index ["user_id"], name: "index_credentials_on_user_id"
+  end
 
   create_table "event_store_events", force: :cascade do |t|
     t.uuid "event_id", null: false
@@ -51,9 +63,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_23_184140) do
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "webauthn_id"
+    t.string "username", null: false
     t.index ["name"], name: "index_users_on_name", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "credentials", "users"
   add_foreign_key "event_store_events_in_streams", "event_store_events", column: "event_id", primary_key: "event_id"
   add_foreign_key "sessions", "users"
 end
