@@ -10,6 +10,10 @@ gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
+
+# Use Tailwind CSS framework [https://tailwindcss.com]
+gem "cssbundling-rails"
+
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
