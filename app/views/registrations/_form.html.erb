@@ -1,6 +1,10 @@
-<%= form_with(
-  model: user, url: signin_path, class: "w-full space-y-4",
-  data: { turbo:"false", controller: "registration", action: "submit->registration#callback" }) do |form|
+<%= form_with(model: user, url: registration_path, class: "w-full space-y-4",
+  data: {
+    turbo:"false",
+    controller: "registration",
+    action: "submit->registration#callback",
+    registration_callback_url_value: callback_registration_path
+    }) do |form|
 %>
   <!-- Name Field -->
   <div class="form-control w-full">
