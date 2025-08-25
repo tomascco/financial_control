@@ -4,7 +4,7 @@ WebAuthn.configure do |config|
   # This value needs to match `window.location.origin` evaluated by
   # the User Agent during registration and authentication ceremonies.
   # Multiple origins can be used when needed. Using more than one will imply you MUST configure rp_id explicitely. If you need your credentials to be bound to a single origin but you have more than one tenant, please see [our Advanced Configuration section](https://github.com/cedarcode/webauthn-ruby/blob/master/docs/advanced_configuration.md) instead of adding multiple origins.
-  config.allowed_origins = [ "http://localhost:3000" ]
+  config.allowed_origins = [ "http://localhost:3000", "https://finances.tomascco.dev" ]
 
   # Relying Party name for display purposes
   config.rp_name = "Financial Control"
