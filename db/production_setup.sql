@@ -1,0 +1,4 @@
+CREATE DATABASE financial_control_production;
+CREATE DATABASE financial_control_production_cache;
+CREATE DATABASE financial_control_production_queue;
+CREATE DATABASE financial_control_production_cable;
