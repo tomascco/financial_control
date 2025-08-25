@@ -78,22 +78,23 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+<% db_url = Rails.application.credentials.db_url %>
 production:
   primary: &primary_production
     <<: *default
-    url: <%= Rails.application.credentials.db_url %>
+    url: <%= db_url %>
   cache:
     <<: *primary_production
     database: financial_control_production_cache
     migrations_paths: db/cache_migrate
-    url: <%= URI.parse(Rails.application.credentials.db_url).tap { |url| url.path += "_cache" } %>
+    url: <%= URI.parse(db_url).tap { |url| url.path += "_cache" } if db_url %>
   queue:
     <<: *primary_production
     database: financial_control_production_queue
     migrations_paths: db/queue_migrate
-    url: <%= URI.parse(Rails.application.credentials.db_url).tap { |url| url.path += "_queue" } %>
+    url: <%= URI.parse(db_url).tap { |url| url.path += "_queue" } if db_url %>
   cable:
     <<: *primary_production
     database: financial_control_production_cable
     migrations_paths: db/cable_migrate
-    url: <%= URI.parse(Rails.application.credentials.db_url).tap { |url| url.path += "_cable" } %>
+    url: <%= URI.parse(db_url).tap { |url| url.path += "_cable" } if db_url %>
