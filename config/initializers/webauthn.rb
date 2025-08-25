@@ -4,7 +4,11 @@ WebAuthn.configure do |config|
   # This value needs to match `window.location.origin` evaluated by
   # the User Agent during registration and authentication ceremonies.
   # Multiple origins can be used when needed. Using more than one will imply you MUST configure rp_id explicitely. If you need your credentials to be bound to a single origin but you have more than one tenant, please see [our Advanced Configuration section](https://github.com/cedarcode/webauthn-ruby/blob/master/docs/advanced_configuration.md) instead of adding multiple origins.
-  config.allowed_origins = [ "http://localhost:3000", "https://finances.tomascco.dev" ]
+  config.allowed_origins = if Rails.env.production?
+    [ "https://finances.tomascco.dev" ]
+  else
+    [ "http://localhost:3000" ]
+  end
 
   # Relying Party name for display purposes
   config.rp_name = "Financial Control"
@@ -23,7 +27,7 @@ WebAuthn.configure do |config|
   # In this case the default would be "auth.example.com", but you can set it to
   # the suffix "example.com"
   #
-  config.rp_id = "tomascco.dev"
+  # config.rp_id = "example.com"
 
   # Configure preferred binary-to-text encoding scheme. This should match the encoding scheme
   # used in your client-side (user agent) code before sending the credential to the server.
