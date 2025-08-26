@@ -18,8 +18,14 @@
 #
 #  fk_rails_...  (user_id => users.id)
 #
-class BankAccount < ApplicationRecord
+class BankAccounts::Record < ApplicationRecord
+  self.table_name = "bank_accounts"
+
   default_scope { where(deleted_at: nil) }
 
   belongs_to :user
+
+  def stream_name
+    "User$#{id}BankAccount$#{id}"
+  end
 end
