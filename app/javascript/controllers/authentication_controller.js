@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { Turbo } from "@hotwired/turbo-rails";
 import { post } from "@rails/request.js"
+import { showToast } from "../toast_manager";
 
 // Connects to data-controller="authentication"
 export default class extends Controller {
@@ -15,8 +16,9 @@ export default class extends Controller {
     const sessionRequest = await post(this.sessionUrlValue, { method: "POST" });
     if (!sessionRequest.ok) {
       const errorData = await sessionRequest.json;
-      console.error("Error:", errorData);
-      console.error("Error initiating authentication");
+
+      showToast("Error initiating authentication", "error", 1000);
+      return;
     }
 
     const challengeData = await sessionRequest.json;
@@ -26,8 +28,9 @@ export default class extends Controller {
     const authenticationResult = await post(this.callbackUrlValue, { body: JSON.stringify(credential) });
     if (!authenticationResult.ok) {
       const errorData = await authenticationResult.text;
-      console.error("Error:", errorData);
-      console.error("Error completing authentication");
+
+      showToast("Error on authentication callback", "error", 1000);
+      return;
     }
 
     Turbo.visit("/");

@@ -2,6 +2,7 @@
   "name": "app",
   "private": true,
   "devDependencies": {
+    "daisyui": "^5.0.50",
     "esbuild": "^0.25.9"
   },
   "scripts": {
@@ -13,7 +14,6 @@
     "@hotwired/turbo-rails": "^8.0.16",
     "@rails/request.js": "^0.0.12",
     "@tailwindcss/cli": "^4.1.12",
-    "daisyui": "^5.0.50",
     "tailwindcss": "^4.1.12"
   }
 }

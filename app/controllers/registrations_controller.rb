@@ -3,6 +3,8 @@ class RegistrationsController < ApplicationController
 
   # GET /signin/new
   def new
+    redirect_to root_path, alert: "You are already signed in." and return if authenticated?
+
     render :new, locals: { user: User.new }
   end
 

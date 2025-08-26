@@ -1,6 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 import { Turbo } from "@hotwired/turbo-rails";
 import { post } from "@rails/request.js"
+import { showToast } from "../toast_manager";
 
 // Connects to data-controller="registration"
 export default class extends Controller {
@@ -17,8 +18,8 @@ export default class extends Controller {
 
     if (!response.ok) {
       const errorData = await response.json;
-      console.error("Error:", errorData);
-      console.error("Error submitting form");
+      showToast("Error initiating registration", "error", 1000);
+      return;
     }
 
     const requestData = await response.json;
@@ -32,10 +33,9 @@ export default class extends Controller {
 
     if (!result.ok) {
       const errorData = await result.text;
-      console.error("Error:", errorData);
-      console.error("Error completing registration");
+      showToast("Error on registration callback", "error", 1000);
+      return;
     }
-
 
     Turbo.visit("/");
   }

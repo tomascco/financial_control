@@ -7,3 +7,14 @@
 @plugin "daisyui" {
   themes: light --default, dark --prefersdark;
 }
+
+#notifications-container {
+  svg {
+    display: none;
+  }
+
+  .alert-info svg.info { display: block; }
+  .alert-success svg.success { display: block; }
+  .alert-warning svg.warning { display: block; }
+  .alert-error svg.error { display: block; }
+}
