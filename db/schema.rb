@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_013434) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_26_165628) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bank_accounts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "name"], name: "index_bank_accounts_on_user_id_and_name", unique: true
+    t.index ["user_id"], name: "index_bank_accounts_on_user_id"
+  end
 
   create_table "credentials", force: :cascade do |t|
     t.string "external_id"
@@ -69,6 +79,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_013434) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  add_foreign_key "bank_accounts", "users"
   add_foreign_key "credentials", "users"
   add_foreign_key "event_store_events_in_streams", "event_store_events", column: "event_id", primary_key: "event_id"
   add_foreign_key "sessions", "users"

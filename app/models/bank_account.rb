@@ -1,22 +1,25 @@
 # == Schema Information
 #
-# Table name: sessions
+# Table name: bank_accounts
 #
 #  id         :bigint           not null, primary key
-#  ip_address :string
-#  user_agent :string
+#  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  deleted_at :datetime
 #  user_id    :bigint           not null
 #
 # Indexes
 #
-#  index_sessions_on_user_id  (user_id)
+#  index_bank_accounts_on_user_id           (user_id)
+#  index_bank_accounts_on_user_id_and_name  (user_id,name) UNIQUE
 #
 # Foreign Keys
 #
 #  fk_rails_...  (user_id => users.id)
 #
-class Session < ApplicationRecord
+class BankAccount < ApplicationRecord
+  default_scope { where(deleted_at: nil) }
+
   belongs_to :user
 end

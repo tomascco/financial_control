@@ -17,6 +17,7 @@
 #
 #  fk_rails_...  (user_id => users.id)
 #
-class Session < ApplicationRecord
-  belongs_to :user
-end
+tomas:
+  user: tomas
+  ip_address: "127.0.0.1"
+  user_agent: Firefox

@@ -77,6 +77,9 @@ GEM
     aggregate_root (2.17.1)
       ruby_event_store (= 2.17.1)
     android_key_attestation (0.3.0)
+    annotaterb (4.18.0)
+      activerecord (>= 6.0.0)
+      activesupport (>= 6.0.0)
     arkency-command_bus (0.4.1)
       concurrent-ruby
     ast (2.4.3)
@@ -421,6 +424,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  annotaterb
   bootsnap
   brakeman
   capybara

@@ -1,9 +1,20 @@
-<% password_digest = BCrypt::Password.create("password") %>
-
-one:
-  email_address: one@example.com
-  password_digest: <%= password_digest %>
-
-two:
-  email_address: two@example.com
-  password_digest: <%= password_digest %>
+# == Schema Information
+#
+# Table name: users
+#
+#  id          :bigint           not null, primary key
+#  name        :string           not null
+#  username    :string           not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  webauthn_id :string
+#
+# Indexes
+#
+#  index_users_on_name      (name) UNIQUE
+#  index_users_on_username  (username) UNIQUE
+#
+tomas:
+  name: Tomás
+  username: tomas
+  webauth_id: R0hnrd3g5Ov1kPaZThwrMH-X1Qr2MoVFr9I4MEp0xyW5swDRQEX_iHiaMZrP2zW6EAj5WXbVjrdWIGN2jXj2oA # WebAuthn.generate_user_id
