@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BankAccounts
-  class InitializedCurrentMonth < ApplicationEvent
+  class BalanceInitialized < ApplicationEvent
     MANDATORY_KEYS = %i[ amount_cents ].freeze
   end
 end
