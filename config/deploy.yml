@@ -13,7 +13,8 @@ servers:
   #     - 192.168.0.1
   #   cmd: bin/jobs
   cron:
-    hosts: 40.233.16.198
+    hosts:
+      - 40.233.16.198
     cmd: bash -c "bundle exec whenever --update-crontab && (env && crontab -l) | crontab - && cron -f"
     options:
       user: root
