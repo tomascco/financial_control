@@ -19,6 +19,7 @@
 class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :credentials, dependent: :destroy
+  has_many :bank_accounts, class_name: "BankAccounts::Record", dependent: :destroy
 
   validates :name, presence: true
   validates :username, presence: true, uniqueness: true

@@ -25,7 +25,12 @@ class BankAccounts::Record < ApplicationRecord
 
   belongs_to :user
 
-  def stream_name
-    "User$#{id}BankAccount$#{id}"
+  def current_month_stream_name
+    time = Time.current
+    "BankAccount$#{id}-#{time.year}-#{time.month.to_s.rjust(2, '0')}"
+  end
+
+  def main_stream_name
+    "BankAccount$#{id}"
   end
 end
