@@ -23,5 +23,5 @@
 #  fk_rails_...  (user_id => users.id)
 #
 class Credential < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, class_name: "Users::Record", foreign_key: :user_id
 end

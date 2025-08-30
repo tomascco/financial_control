@@ -16,10 +16,12 @@
 #  index_users_on_name      (name) UNIQUE
 #  index_users_on_username  (username) UNIQUE
 #
-class User < ApplicationRecord
-  has_many :sessions, dependent: :destroy
-  has_many :credentials, dependent: :destroy
-  has_many :bank_accounts, class_name: "BankAccounts::Record", dependent: :destroy
+class Users::Record < ApplicationRecord
+  self.table_name = "users"
+
+  has_many :sessions, foreign_key: :user_id, dependent: :destroy
+  has_many :credentials, foreign_key: :user_id, dependent: :destroy
+  has_many :bank_accounts, class_name: "BankAccounts::Record", foreign_key: :user_id, dependent: :destroy
 
   validates :name, presence: true
   validates :username, presence: true, uniqueness: true

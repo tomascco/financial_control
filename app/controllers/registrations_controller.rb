@@ -5,12 +5,12 @@ class RegistrationsController < ApplicationController
   def new
     redirect_to root_path, alert: "You are already signed in." and return if authenticated?
 
-    render :new, locals: { user: User.new }
+    render :new, locals: { user: Users::Record.new }
   end
 
   # POST /signin
   def create
-    user = User.new(user_params)
+    user = Users::Record.new(user_params)
 
     create_options = ::WebAuthn::Credential.options_for_create(
       user: { id: user.webauthn_id, name: user.name },
@@ -29,7 +29,7 @@ class RegistrationsController < ApplicationController
   def callback
     webauthn_credential = ::WebAuthn::Credential.from_create(params)
 
-    user = User.new(session.dig(:current_registration, "user"))
+    user = Users::Record.new(session.dig(:current_registration, "user"))
     begin
       webauthn_credential.verify(session.dig(:current_registration, "challenge"), user_verification: true)
 

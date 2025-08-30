@@ -3,6 +3,7 @@
 class ExpenseCreation < Solid::Process
   deps do
     attribute :bank_account_repository, default: ::BankAccounts::Repository.new
+    attribute :event_store, default: Rails.configuration.event_store
   end
 
   input do
@@ -10,7 +11,6 @@ class ExpenseCreation < Solid::Process
     attribute :description, :string
     attribute :user_id
     attribute :bank_account_id
-    attribute :kind, :string
   end
 
   def call(attributes)
@@ -28,12 +28,16 @@ class ExpenseCreation < Solid::Process
     Continue(bank_account:)
   end
 
-  def build_and_publish_event(amount_cents:, description:, bank_account:, **)
+  def build_and_publish_event(amount_cents:, description:, user_id:, bank_account:, **)
     null_uuid = "00000000-0000-0000-0000-000000000000"
 
     deps.bank_account_repository.with_bank_account(bank_account) do |balance|
-      balance.publish_expense(amount_cents:, description:, transaction_id: null_uuid)
+      balance.publish_expense!(amount_cents:, description:, transaction_id: null_uuid)
     end
+
+    event = Users::DebitCreated.new(data: { amount_cents:, transaction_id: null_uuid })
+
+    deps.event_store.publish(event, stream_name: "User$#{user_id}")
 
     Success(:event_published)
   end

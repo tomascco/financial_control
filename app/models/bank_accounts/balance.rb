@@ -9,11 +9,10 @@ module BankAccounts
     class InsufficientFundsError < StandardError; end
 
     def initialize
-      puts "balance"
       @balance_cents = 0
     end
 
-    def publish_expense(amount_cents:, description:, transaction_id:)
+    def publish_expense!(amount_cents:, description:, transaction_id:)
       raise InsufficientFundsError if @balance_cents < amount_cents
 
       apply Debited.new(data: { amount_cents:, description:, transaction_id: })

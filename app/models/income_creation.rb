@@ -3,6 +3,7 @@
 class IncomeCreation < Solid::Process
   deps do
     attribute :bank_account_repository, default: ::BankAccounts::Repository.new
+    attribute :event_store, default: Rails.configuration.event_store
   end
 
   input do
@@ -27,14 +28,15 @@ class IncomeCreation < Solid::Process
     Continue(bank_account:)
   end
 
-  def build_and_publish_event(amount_cents:, description:, bank_account:, **)
+  def build_and_publish_event(amount_cents:, description:, user_id:, bank_account:, **)
     null_uuid = "00000000-0000-0000-0000-000000000000"
 
-    puts "?????"
     deps.bank_account_repository.with_bank_account(bank_account) do |balance|
-      puts "help"
       balance.publish_income(amount_cents:, description:, transaction_id: null_uuid)
     end
+
+    event = Users::CreditCreated.new(data: { amount_cents:, transaction_id: null_uuid })
+    deps.event_store.publish(event, stream_name: "User$#{user_id}")
 
     Success(:event_published)
   end

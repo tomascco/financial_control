@@ -23,7 +23,7 @@ class BankAccounts::Record < ApplicationRecord
 
   default_scope { where(deleted_at: nil) }
 
-  belongs_to :user
+  belongs_to :user, class_name: "Users::Record", foreign_key: :user_id
 
   def current_month_stream_name
     time = Time.current
